@@ -1,0 +1,54 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  pubDate: Date;
+  heroImage?: string;
+  slug: string;
+  author?: string;
+  categories?: string[];
+}
+
+const { title, description, pubDate, heroImage, slug, author, categories } = Astro.props;
+
+const formattedDate = pubDate.toLocaleDateString('nl-NL', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<article class="group">
+  <a href={`/blog/${slug}/`} class="block">
+    {heroImage && (
+      <img
+        src={heroImage}
+        alt={title}
+        class="w-full h-48 object-cover rounded-lg mb-4 group-hover:opacity-90 transition-opacity"
+        loading="lazy"
+      />
+    )}
+    <div class="space-y-2">
+      {categories && categories.length > 0 && (
+        <div class="flex gap-2">
+          {categories.map((cat) => (
+            <span class="text-xs font-medium text-primary bg-blue-50 px-2 py-1 rounded">
+              {cat}
+            </span>
+          ))}
+        </div>
+      )}
+      <h2 class="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors">
+        {title}
+      </h2>
+      {description && (
+        <p class="text-gray-600 line-clamp-2">{description}</p>
+      )}
+      <div class="flex items-center gap-2 text-sm text-gray-500">
+        {author && <span>{author}</span>}
+        {author && <span>·</span>}
+        <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+      </div>
+    </div>
+  </a>
+</article>

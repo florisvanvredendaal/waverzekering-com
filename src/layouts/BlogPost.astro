@@ -1,0 +1,56 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { siteConfig } from '../config';
+
+const { frontmatter } = Astro.props;
+
+const formattedDate = frontmatter.pubDate
+  ? new Date(frontmatter.pubDate).toLocaleDateString('nl-NL', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  : '';
+---
+
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  image={frontmatter.heroImage}
+  type="article"
+  pubDate={frontmatter.pubDate ? new Date(frontmatter.pubDate) : undefined}
+>
+  <article class="max-w-3xl mx-auto px-4 py-8">
+    {frontmatter.heroImage && (
+      <img
+        src={frontmatter.heroImage}
+        alt={frontmatter.title}
+        class="w-full h-64 md:h-96 object-cover rounded-lg mb-8"
+      />
+    )}
+
+    <header class="mb-8">
+      {frontmatter.categories && frontmatter.categories.length > 0 && (
+        <div class="flex gap-2 mb-4">
+          {frontmatter.categories.map((cat: string) => (
+            <span class="text-xs font-medium text-primary bg-blue-50 px-2 py-1 rounded">
+              {cat}
+            </span>
+          ))}
+        </div>
+      )}
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        {frontmatter.title}
+      </h1>
+      <div class="flex items-center gap-2 text-gray-500">
+        {frontmatter.author && <span>{frontmatter.author}</span>}
+        {frontmatter.author && formattedDate && <span>·</span>}
+        {formattedDate && <time datetime={new Date(frontmatter.pubDate).toISOString()}>{formattedDate}</time>}
+      </div>
+    </header>
+
+    <div class="prose">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>
