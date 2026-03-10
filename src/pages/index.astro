@@ -8,8 +8,7 @@ const posts = (await getCollection('blog'))
   .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-const pages = (await getCollection('pages'));
-const hasContent = posts.length > 0 || pages.length > 0;
+const pages = await getCollection('pages');
 ---
 
 <BaseLayout title="Home">
@@ -43,7 +42,7 @@ const hasContent = posts.length > 0 || pages.length > 0;
       </section>
     )}
 
-    {posts.length === 0 && pages.length > 0 && (
+    {pages.length > 0 && (
       <section>
         <h2 class="text-2xl font-bold text-gray-900 mb-6">Pagina's</h2>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
